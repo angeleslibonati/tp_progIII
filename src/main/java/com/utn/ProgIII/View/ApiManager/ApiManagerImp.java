@@ -15,13 +15,14 @@ import jakarta.validation.constraints.Null;
 public class ApiManagerImp implements  ApiManager{
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
-    private final String BaseUrl = "http://localhost:8080/";
+    private final String BaseUrl;
     private String authToken;
 
-    public ApiManagerImp() {
+    public ApiManagerImp(String baseUrl) {
         this.httpClient = HttpClient.newBuilder().build();
         this.objectMapper = new ObjectMapper();
         this.authToken = "";
+        this.BaseUrl = baseUrl;
     }
     private void setToken(String token){
         this.authToken = token;
@@ -151,6 +152,11 @@ public class ApiManagerImp implements  ApiManager{
                 .build();
 
         return sendRequest(request, responseType);
+    }
+
+    @Override
+    public void CerrarSesion() {
+        this.authToken = null;
     }
 
     private String addQueryParams(String url, Map<String,String> queryParams){

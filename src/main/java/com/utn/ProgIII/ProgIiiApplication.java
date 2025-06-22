@@ -15,7 +15,7 @@ public class ProgIiiApplication {
 
 		SpringApplication.run(ProgIiiApplication.class, args);
 
-		ApiManagerImp manager = new ApiManagerImp();
+		ApiManagerImp manager = new ApiManagerImp(System.getenv("API_URL"));
 //		LoginRequestDTO cred = new LoginRequestDTO("cebollin","dferg532");
 
         try {

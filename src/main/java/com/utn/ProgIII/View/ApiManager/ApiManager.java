@@ -22,4 +22,6 @@ public interface ApiManager {
     public <T> T Delete(String path, String id, Class<T> responseType, Map<String,String> queryParams) throws IOException, InterruptedException;
     public <T> T Patch(String path, String id, Object requestBody, Class<T> responseType, Map<String,String> queryParams) throws IOException, InterruptedException;
 
+    public void CerrarSesion();
+
 }

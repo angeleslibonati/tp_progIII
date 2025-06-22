@@ -12,34 +12,14 @@ public class Menu {
 
     public static void menu (Scanner scan, ApiManagerImp manager) throws IOException, InterruptedException{
 
-        String username;
-        String password;
         boolean continuar = true;
-        LoginResponseDTO tokenDTO;
-        LoginRequestDTO credencialDTO;
-        JwtUtil jwtUtil = new JwtUtil();
+        String rol = "";
 
         System.out.println("-- Bienvenido --\n");
         while (continuar){
             try {
 
-                int opcion = 1;
-
-                System.out.println("-- Iniciar Sesion --");
-
-                //Usuario
-                System.out.println("Usuario : ");
-                username = scan.nextLine();
-
-                // Contraseña
-                System.out.println("Contraseña : ");
-                password = scan.nextLine();
-
-                //logueo
-                credencialDTO = new LoginRequestDTO(username,password);
-
-                tokenDTO = manager.Post("auth/login",credencialDTO, LoginResponseDTO.class);
-                String rol = jwtUtil.extractRole(tokenDTO.token());
+                rol = Login(scan,manager);
 
                 switch (rol){
                     case "ROLE_ADMIN":
@@ -66,8 +46,35 @@ public class Menu {
         }
 
         System.out.println("-- No apague su pc --");
-        System.out.println("   Saliendo...");
+        System.out.println("   Cerrando sesion...");
+        manager.CerrarSesion();
+        System.exit(0);
+    }
 
+    public static String Login(Scanner scan, ApiManagerImp manager) throws IOException, InterruptedException {
+        String username;
+        String password;
+        LoginResponseDTO tokenDTO;
+        LoginRequestDTO credencialDTO;
+        JwtUtil jwtUtil = new JwtUtil();
+
+        int opcion = 1;
+
+        System.out.println("-- Iniciar Sesion --");
+
+        //Usuario
+        System.out.println("Usuario : ");
+        username = scan.nextLine();
+
+        // Contraseña
+        System.out.println("Contraseña : ");
+        password = scan.nextLine();
+
+        //logueo
+        credencialDTO = new LoginRequestDTO(username,password);
+
+        tokenDTO = manager.Post("auth/login",credencialDTO, LoginResponseDTO.class);
+        return  jwtUtil.extractRole(tokenDTO.token());
     }
 
     //elegir opcion
