@@ -54,7 +54,8 @@ public class MenuManager {
 
         String id;
         String searchParam;
-
+        String newFile;
+        boolean continuar = true;
 
         while (opcion != 0){
 
@@ -68,106 +69,156 @@ public class MenuManager {
                     switch (opcion) {
 
                         case 1:
-                            System.out.println("-- Nuevo producto --\n");
+                            while (continuar){
 
-                            System.out.println("Nombre");
-                            newProduct.setName(scan.nextLine());
+                                try {
 
-                            newProduct.setStatus(ProductStatus.ENABLED);
+                                    System.out.println("-- Nuevo producto --\n");
 
-                            productDTO = productMapper.toProductDTO(newProduct);
-                            System.out.println("   Procesando...");
-                            productDTO = manager.Post("product", productDTO, ProductDTO.class);
+                                    System.out.println("Nombre");
+                                    newProduct.setName(scan.nextLine());
 
-                            System.out.println("-- Carga exitosa -- ");
-                            System.out.println(productDTO.toString());
+                                    newProduct.setStatus(ProductStatus.ENABLED);
 
+                                    productDTO = productMapper.toProductDTO(newProduct);
+                                    System.out.println("   Procesando...");
+                                    productDTO = manager.Post("product", productDTO, ProductDTO.class);
 
+                                    System.out.println("-- Carga exitosa -- ");
+                                    System.out.println(productDTO.toString());
+
+                                    continuar = false;
+
+                                } catch (Exception e) {
+
+                                    System.out.println("⚠ Error: " + e.getMessage());
+                                    continuar = chooseContinue(scan);
+                                }
+                            }
+                            continuar = true;
                             break;
 
                         case 2:
 
-                            //Baja Logica de un producto
-                            System.out.println("-- Eliminar un producto --\n");
+                            while (continuar){
 
-                            System.out.println("Ingrese el id del producto");
-                            id = scan.nextLine();
+                                try {
 
-                            System.out.println("   Procesando...");
+                                    //Baja Logica de un producto
+                                    System.out.println("-- Eliminar un producto --\n");
 
-                            productDTO = manager.Delete("product", id, ProductDTO.class);
+                                    System.out.println("Ingrese el id del producto");
+                                    id = scan.nextLine();
 
-                            System.out.println("-- Eliminacion exitosa --");
-                            System.out.println(productDTO.toString());
+                                    System.out.println("   Procesando...");
 
+                                    productDTO = manager.Delete("product", id, ProductDTO.class);
+
+                                    System.out.println("-- Eliminacion exitosa --");
+                                    System.out.println(productDTO.toString());
+
+                                    continuar = false;
+
+                                }catch (Exception e) {
+
+                                    System.out.println("⚠ Error: " + e.getMessage());
+                                    continuar = chooseContinue(scan);
+                                }
+                            }
+                            continuar = true;
                             break;
 
                         case 3:
 
-                            System.out.println("-- Modificar un producto --\n");
+                            while (continuar){
 
-                            System.out.println("Ingrese el id del producto");
-                            id = scan.nextLine();
+                                try {
 
-                            productDTO = manager.Get("product", id, ProductDTO.class);
+                                    System.out.println("-- Modificar un producto --\n");
 
-                            System.out.println(productDTO.toString());
+                                    System.out.println("Ingrese el id del producto");
+                                    id = scan.nextLine();
 
-                            newProduct = productMapper.toEntity(productDTO);
+                                    productDTO = manager.Get("product", id, ProductDTO.class);
 
-                            while (opcion != 0) {
+                                    System.out.println(productDTO.toString());
 
-                                System.out.println("-- Ingrese el campo que desea modificar --\n");
+                                    newProduct = productMapper.toEntity(productDTO);
 
-                                System.out.println("1. Nombre");
-                                System.out.println("2. Estado");
-                                opcion = chooseOption(scan);
+                                    while (opcion != 0) {
 
-                                switch (opcion) {
-                                    case 1:
-                                        System.out.println("Nombre");
-                                        newProduct.setName(scan.nextLine());
-                                        break;
+                                        System.out.println("-- Ingrese el campo que desea modificar --\n");
 
-                                    case 2:
-                                        System.out.println("Estado");
+                                        System.out.println("1. Nombre");
+                                        System.out.println("2. Estado");
+                                        opcion = chooseOption(scan);
 
-                                        if (newProduct.getStatus().equals(ProductStatus.ENABLED)) {
-                                            newProduct.setStatus(ProductStatus.DISABLED);
-                                        } else {
-                                            newProduct.setStatus(ProductStatus.ENABLED);
+                                        switch (opcion) {
+                                            case 1:
+                                                System.out.println("Nombre");
+                                                newProduct.setName(scan.nextLine());
+                                                break;
+
+                                            case 2:
+                                                System.out.println("Estado");
+
+                                                if (newProduct.getStatus().equals(ProductStatus.ENABLED)) {
+                                                    newProduct.setStatus(ProductStatus.DISABLED);
+                                                } else {
+                                                    newProduct.setStatus(ProductStatus.ENABLED);
+                                                }
+
+                                                break;
+
+                                            default:
+                                                System.out.println("Opción invalida");
                                         }
 
-                                        break;
+                                        System.out.println("¿Desea modificar otro campo?");
+                                        System.out.println("1. Si");
+                                        System.out.println("0. No");
+                                        opcion = scan.nextInt();
+                                        scan.nextLine();
 
-                                    default:
-                                        System.out.println("Opción invalida");
+                                        productDTO = manager.Put("product", newProduct, id, ProductDTO.class);
+
+                                        System.out.println(productDTO.toString());
+                                    }
+
+                                    continuar = false;
+                                }catch (Exception e) {
+
+                                    System.out.println("⚠ Error: " + e.getMessage());
+                                    continuar = chooseContinue(scan);
                                 }
-
-                                System.out.println("¿Desea modificar otro campo?");
-                                System.out.println("1. Si");
-                                System.out.println("0. No");
-                                opcion = scan.nextInt();
-                                scan.nextLine();
-
-                                productDTO = manager.Put("product", newProduct, id, ProductDTO.class);
-
-                                System.out.println(productDTO.toString());
                             }
-                            opcion = 1;
+                            continuar = true;
                             break;
 
                         case 4:
 
-                            System.out.println("-- Visualizar todos los productos --\n");
+                            while (continuar){
 
-                            productsDTO = manager.Get("product", null, ProductDTO[].class);
+                                try {
 
-                            for (ProductDTO productDto : productsDTO) {
-                                System.out.println(productDto.toString());
+                                    System.out.println("-- Visualizar todos los productos --\n");
+
+                                    productsDTO = manager.Get("product", null, ProductDTO[].class);
+
+                                    for (ProductDTO productDto : productsDTO) {
+                                        System.out.println(productDto.toString());
+                                    }
+
+                                    continuar = false;
+
+                                }catch (Exception e) {
+
+                                    System.out.println("⚠ Error: " + e.getMessage());
+                                    continuar = chooseContinue(scan);
+                                }
+
                             }
-
-                            opcion = 1;
+                            continuar = true;
                             break;
 
                         case 5:
@@ -178,51 +229,89 @@ public class MenuManager {
                             switch (opcion) {
 
                                 case 1:
+                                    while (continuar){
 
-                                    System.out.println("Ingrese el Id del producto");
-                                    id = scan.nextLine();
+                                        try {
 
-                                    productDTO = manager.Get("product", id, ProductDTO.class);
+                                            System.out.println("Ingrese el Id del producto");
+                                            id = scan.nextLine();
 
-                                    System.out.println(productDTO.toString());
+                                            productDTO = manager.Get("product", id, ProductDTO.class);
 
+                                            System.out.println(productDTO.toString());
+
+                                            continuar = false;
+
+                                        }catch (Exception e) {
+
+                                            System.out.println("⚠ Error: " + e.getMessage());
+                                            continuar = chooseContinue(scan);
+                                        }
+
+                                    }
+                                    continuar = true;
                                     break;
 
                                 case 2:
 
-                                    System.out.println("Ingrese el nombre del producto");
-                                    searchParam = scan.nextLine();
+                                    while (continuar){
 
-                                    productsDTO = manager.Get("product/search/name", searchParam, ProductDTO[].class);
+                                        try {
 
-                                    for (ProductDTO productDto : productsDTO) {
 
-                                        System.out.println(productDto.toString());
+                                            System.out.println("Ingrese el nombre del producto");
+                                            searchParam = scan.nextLine();
+
+                                            productsDTO = manager.Get("product/search/name", searchParam, ProductDTO[].class);
+
+                                            for (ProductDTO productDto : productsDTO) {
+
+                                                System.out.println(productDto.toString());
+                                            }
+                                            continuar = false;
+                                        }catch (Exception e) {
+
+                                            System.out.println("⚠ Error: " + e.getMessage());
+                                            continuar = chooseContinue(scan);
+                                        }
+
                                     }
-
+                                    continuar = true;
                                     break;
 
                                 case 3:
 
-                                    System.out.println("-- Estado del producto --");
+                                    while (continuar){
+                                        try {
 
-                                    System.out.println("1. Activo");  //enabled
-                                    System.out.println("2. Inactivo");     //disabled
+                                            System.out.println("-- Estado del producto --");
 
-                                    opcion = chooseOption(scan);
+                                            System.out.println("1. Activo");  //enabled
+                                            System.out.println("2. Inactivo");     //disabled
 
-                                    if (opcion == 1) {
-                                        searchParam = "ENABLED";
-                                    } else {
-                                        searchParam = "DISABLED";
+                                            opcion = chooseOption(scan);
+
+                                            if (opcion == 1) {
+                                                searchParam = "ENABLED";
+                                            } else {
+                                                searchParam = "DISABLED";
+                                            }
+                                            System.out.println("   Procesando...");
+                                            productsDTO = manager.Get("product/search/status", searchParam, ProductDTO[].class);
+
+                                            for (ProductDTO productDto : productsDTO) {
+                                                System.out.println(productDto.toString());
+                                            }
+
+                                            continuar = false;
+
+                                        }catch (Exception e) {
+
+                                            System.out.println("⚠ Error: " + e.getMessage());
+                                            continuar = chooseContinue(scan);
+                                        }
                                     }
-                                    System.out.println("   Procesando...");
-                                    productsDTO = manager.Get("product/search/status", searchParam, ProductDTO[].class);
-
-                                    for (ProductDTO productDto : productsDTO) {
-                                        System.out.println(productDto.toString());
-                                    }
-
+                                    continuar = true;
                                     break;
 
                                 case 0:
@@ -233,20 +322,24 @@ public class MenuManager {
 
                                 default:
                                     System.out.println("Opción invalida");
+                                    break;
 
                             }
 
-                            opcion = 1;
                             break;
 
                         case 0:
-                            //volver atras
-                            printMenuAdmin();
-                            opcion = chooseOption(scan);
+//                            //volver atras
+//                            printMenuAdmin();
+//                            opcion = chooseOption(scan);
                             break;
                         default:
                             System.out.println("Opción invalida");
+                            break;
                     }
+                    printMenuAdmin();
+                    opcion = chooseOption(scan);
+                    break;
 
                 case 2:  //Gestion proveedor
 
@@ -257,155 +350,215 @@ public class MenuManager {
 
                         case 1: //alta
 
-                            System.out.println("-- Nuevo proveedor --\n");
+                            while (continuar){
+                                try {
 
-                            System.out.println("Nombre compañia");
-                            newSupplier.setCompanyName(scan.nextLine());
-                            System.out.println("Cuit");
-                            newSupplier.setCuit(scan.nextLine());
-                            System.out.println("Telefono");
-                            newSupplier.setPhoneNumber(scan.nextLine());
-                            System.out.println("Email");
-                            newSupplier.setEmail(scan.nextLine());
+                                    System.out.println("-- Nuevo proveedor --\n");
 
-                            System.out.println("Calle");
-                            newAddress.setStreet(scan.nextLine());
-                            System.out.println("Numero");
-                            newAddress.setNumber(scan.nextLine());
-                            System.out.println("Ciudad");
-                            newAddress.setCity(scan.nextLine());
+                                    System.out.println("Nombre compañia");
+                                    newSupplier.setCompanyName(scan.nextLine());
+                                    System.out.println("Cuit");
+                                    newSupplier.setCuit(scan.nextLine());
+                                    System.out.println("Telefono");
+                                    newSupplier.setPhoneNumber(scan.nextLine());
+                                    System.out.println("Email");
+                                    newSupplier.setEmail(scan.nextLine());
 
-                            newSupplier.setAddress(newAddress);
+                                    System.out.println("Calle");
+                                    newAddress.setStreet(scan.nextLine());
+                                    System.out.println("Numero");
+                                    newAddress.setNumber(scan.nextLine());
+                                    System.out.println("Ciudad");
+                                    newAddress.setCity(scan.nextLine());
 
-                            supplierDTO = supplierMapper.toViewSupplierDTO(newSupplier);
+                                    newSupplier.setAddress(newAddress);
 
-                            supplierDTO = manager.Post("supplier", supplierDTO, ViewSupplierDTO.class);
+                                    supplierDTO = supplierMapper.toViewSupplierDTO(newSupplier);
 
-                            System.out.println("-- Carga exitosa");
+                                    supplierDTO = manager.Post("supplier", supplierDTO, ViewSupplierDTO.class);
 
-                            System.out.println(supplierDTO.toString());
+                                    System.out.println("-- Carga exitosa");
 
-                            opcion = 3;
+                                    System.out.println(supplierDTO.toString());
+
+                                    continuar = false;
+                                }catch (Exception e) {
+
+                                    System.out.println("⚠ Error: " + e.getMessage());
+                                    continuar = chooseContinue(scan);
+                                }
+
+                            }
+                            continuar = true;
                             break;
 
                         case 2:  //baja
 
-                            System.out.println("-- Eliminar proveedor --\n");
+                            while (continuar){
+                                try {
 
-                            System.out.println("Ingrese el id del proveedor");
-                            id = scan.nextLine();
 
-                            System.out.println("   Procesando...");
-                            supplierDTO = manager.Delete("supplier", id, ViewSupplierDTO.class);
-                            System.out.println("\n-- Eliminación exitosa --");
+                                    System.out.println("-- Eliminar proveedor --\n");
 
-                            opcion = 3;
+                                    System.out.println("Ingrese el id del proveedor");
+                                    id = scan.nextLine();
+
+                                    System.out.println("   Procesando...");
+                                    supplierDTO = manager.Delete("supplier", id, ViewSupplierDTO.class);
+                                    System.out.println("\n-- Eliminación exitosa --");
+
+                                    continuar = false;
+                                }catch (Exception e) {
+
+                                    System.out.println("⚠ Error: " + e.getMessage());
+                                    continuar = chooseContinue(scan);
+                                }
+                            }
+                            continuar = true;
                             break;
 
                         case 3:  //modificar
+                            while (continuar){
+                                try {
 
-                            System.out.println("-- Modificación proveedor --\n");
+                                    System.out.println("-- Modificación proveedor --\n");
 
-                            System.out.println("Ingrese el id del proveedor");
-                            id = scan.nextLine();
+                                    System.out.println("Ingrese el id del proveedor");
+                                    id = scan.nextLine();
 
-                            supplierDTO = manager.Get("supplier", id, ViewSupplierDTO.class);
+                                    supplierDTO = manager.Get("supplier", id, ViewSupplierDTO.class);
 
-                            System.out.println(supplierDTO.toString());
-                            supplier = supplierMapper.toObjectFromViewSupplierDTO(supplierDTO);
+                                    System.out.println(supplierDTO.toString());
+                                    supplier = supplierMapper.toObjectFromViewSupplierDTO(supplierDTO);
 
-                            while (opcion != 0) {
+                                    while (opcion != 0) {
 
-                                printSubMenuUpdateSupplier();
-                                opcion = chooseOption(scan);
+                                        printSubMenuUpdateSupplier();
+                                        opcion = chooseOption(scan);
 
-                                newAddress = supplier.getAddress();
+                                        newAddress = supplier.getAddress();
 
-                                switch (opcion) {
-                                    case 1:
-                                        System.out.println("Nombre compañia");
-                                        supplier.setCompanyName(scan.nextLine());
-                                        break;
-                                    case 2:
-                                        System.out.println("Cuit");
-                                        supplier.setPhoneNumber(scan.nextLine());
-                                        break;
-                                    case 3:
-                                        System.out.println("Telefono");
-                                        supplier.setPhoneNumber(scan.nextLine());
-                                        break;
-                                    case 4:
-                                        System.out.println("Email");
-                                        supplier.setEmail(scan.nextLine());
-                                        break;
-                                    case 5:
-                                        System.out.println("Calle");
-                                        newAddress.setStreet(scan.nextLine());
-                                        break;
-                                    case 6:
-                                        System.out.println("Numero");
-                                        newAddress.setNumber(scan.nextLine());
-                                        break;
-                                    case 7:
-                                        System.out.println("Ciudad");
-                                        newAddress.setCity(scan.nextLine());
-                                        break;
-                                    default:
-                                        System.out.println("Opcion invalida");
+                                        switch (opcion) {
+                                            case 1:
+                                                System.out.println("Nombre compañia");
+                                                supplier.setCompanyName(scan.nextLine());
+                                                break;
+                                            case 2:
+                                                System.out.println("Cuit");
+                                                supplier.setPhoneNumber(scan.nextLine());
+                                                break;
+                                            case 3:
+                                                System.out.println("Telefono");
+                                                supplier.setPhoneNumber(scan.nextLine());
+                                                break;
+                                            case 4:
+                                                System.out.println("Email");
+                                                supplier.setEmail(scan.nextLine());
+                                                break;
+                                            case 5:
+                                                System.out.println("Calle");
+                                                newAddress.setStreet(scan.nextLine());
+                                                break;
+                                            case 6:
+                                                System.out.println("Numero");
+                                                newAddress.setNumber(scan.nextLine());
+                                                break;
+                                            case 7:
+                                                System.out.println("Ciudad");
+                                                newAddress.setCity(scan.nextLine());
+                                                break;
+                                            default:
+                                                System.out.println("Opcion invalida");
+                                                break;
 
+                                        }
+
+                                        System.out.println("¿Desea modificar otro campo?");
+                                        System.out.println("1. Si");
+                                        System.out.println("0. No");
+                                        opcion = scan.nextInt();
+                                        scan.nextLine();
+
+                                        supplier.setAddress(newAddress);
+                                        supplierDTO = manager.Put("supplier", supplier, id, ViewSupplierDTO.class);
+
+                                        System.out.println(supplierDTO.toString());
+                                    }
+
+                                    continuar = false;
+                                }catch (Exception e) {
+
+                                    System.out.println("⚠ Error: " + e.getMessage());
+                                    continuar = chooseContinue(scan);
                                 }
-
-                                System.out.println("¿Desea modificar otro campo?");
-                                System.out.println("1. Si");
-                                System.out.println("0. No");
-                                opcion = scan.nextInt();
-                                scan.nextLine();
-
-                                supplier.setAddress(newAddress);
-                                supplierDTO = manager.Put("supplier", supplier, id, ViewSupplierDTO.class);
-
-                                System.out.println(supplierDTO.toString());
                             }
-
-                            opcion = 3;
+                            continuar = true;
                             break;
 
                         case 4:  //visualiza todos los proveedores
 
-                            System.out.println("-- Visualizar todos los proveedores --\n");
+                            while (continuar){
+                                try {
 
-                            suppliersDTO = manager.Get("supplier", null, ViewSupplierDTO[].class);
 
-                            for (ViewSupplierDTO supplierDto : suppliersDTO) {
-                                System.out.println(supplierDto.toString());
+                                    System.out.println("-- Visualizar todos los proveedores --\n");
+
+                                    suppliersDTO = manager.Get("supplier", null, ViewSupplierDTO[].class);
+
+                                    for (ViewSupplierDTO supplierDto : suppliersDTO) {
+                                        System.out.println(supplierDto.toString());
+                                    }
+
+                                    continuar = false;
+
+                                }catch (Exception e) {
+
+                                    System.out.println("⚠ Error: " + e.getMessage());
+                                    continuar = chooseContinue(scan);
+                                }
                             }
-
-                            opcion = 3;
+                            continuar = true;
                             break;
 
                         case 5:  //filtra
 
-                            System.out.println("Ingrese el Id del proveedor");
-                            id = scan.nextLine();
-                            System.out.println("   Procesando...");
+                            while (continuar){
+                                try {
 
-                            supplierDTO = manager.Get("supplier", id, ViewSupplierDTO.class);
+                                    System.out.println("Ingrese el Id del proveedor");
+                                    id = scan.nextLine();
+                                    System.out.println("   Procesando...");
+
+                                    supplierDTO = manager.Get("supplier", id, ViewSupplierDTO.class);
 
 
-                            System.out.println(supplierDTO.toString());
+                                    System.out.println(supplierDTO.toString());
 
-                            opcion = 3;
+                                    continuar = false;
+
+                                }catch (Exception e) {
+
+                                    System.out.println("⚠ Error: " + e.getMessage());
+                                    continuar = chooseContinue(scan);
+                                }
+                            }
+                            continuar = true;
                             break;
 
                         case 0:
                             //volver atras
-                            printMenuAdmin();
-                            opcion = chooseOption(scan);
+//                            printMenuAdmin();
+//                            opcion = chooseOption(scan);
                             break;
 
                         default:
                             System.out.println("opción invalida");
+                            break;
                     }
+
+                    printMenuAdmin();
+                    opcion = chooseOption(scan);
+                    break;
 
                 case 3:  //Gestion producto-proveedor
 
@@ -415,89 +568,114 @@ public class MenuManager {
                     switch (opcion) {
 
                         case 1:  //crear relacion
-                            System.out.println("Ingrese el Id del proveedor");
-                            id = scan.nextLine();
-                            System.out.println("   Procesando...");
 
-                            supplierDTO = manager.Get("supplier", id, ViewSupplierDTO.class);
-                            supplier = supplierMapper.toObjectFromViewSupplierDTO(supplierDTO);
+                            while (continuar){
+                                try{
 
-                            newProductSupplier.setSupplier(supplier);
+                                    System.out.println("Ingrese el Id del proveedor");
+                                    id = scan.nextLine();
+                                    System.out.println("   Procesando...");
 
-                            System.out.println("Ingrese el Id del producto");
-                            id = scan.nextLine();
-                            System.out.println("   Procesando...");
+                                    supplierDTO = manager.Get("supplier", id, ViewSupplierDTO.class);
+                                    supplier = supplierMapper.toObjectFromViewSupplierDTO(supplierDTO);
 
-                            productDTO = manager.Get("product", id, ProductDTO.class);
+                                    newProductSupplier.setSupplier(supplier);
 
-                            newProduct = productMapper.toEntity(productDTO);
+                                    System.out.println("Ingrese el Id del producto");
+                                    id = scan.nextLine();
+                                    System.out.println("   Procesando...");
 
-                            newProduct.setIdProduct(productDTO.idProduct());
+                                    productDTO = manager.Get("product", id, ProductDTO.class);
 
-                            newProductSupplier.setProduct(newProduct);
+                                    newProduct = productMapper.toEntity(productDTO);
 
-                            System.out.println("Ingrese el costo");
-                            newProductSupplier.setCost(scan.nextBigDecimal());
-                            scan.nextLine();
-                            System.out.println("Ingrese el margen de ganancia");
-                            newProductSupplier.setProfitMargin(scan.nextBigDecimal());
-                            scan.nextLine();
-                            newProductSupplier.setPrice(newProductSupplier.getCost().add(newProductSupplier.getCost().multiply(newProductSupplier.getProfitMargin()).divide(BigDecimal.valueOf(100), RoundingMode.CEILING)));
+                                    newProduct.setIdProduct(productDTO.idProduct());
 
-                            productSupplierDTO = productSupplierMapper.fromEntityToDto(newProductSupplier);
+                                    newProductSupplier.setProduct(newProduct);
 
-                            productSupplierDTO = manager.Post("productSupplier", productSupplierDTO, ResponseProductSupplierDTO.class);
-
-                            System.out.println("-- Carga exitosa --");
-
-                            System.out.println(productSupplierDTO.toString());
-                            opcion = 4;
-                            break;
-
-                        case 2:  // modificar costo o margen ganancia  (ver patch)
-
-                            System.out.println("Ingese el Id producto-proveedor");
-                            id = scan.nextLine();
-                            System.out.println("   Procesando...");
-
-                            productSupplierDTO = manager.Get("productSupplier/relationship", id, ResponseProductSupplierDTO.class);
-
-                            System.out.println(productSupplierDTO.toString());
-
-                            newProductSupplier = productSupplierMapper.fromDtoToEntity(productSupplierDTO);
-
-                            while (opcion != 0) {
-
-                                System.out.println("-- Ingrese el campo que desea modificar --\n");
-
-                                System.out.println("1. Costo");
-                                System.out.println("2. Porcentaje de ganancia");
-                                opcion = chooseOption(scan);
-
-                                if (opcion == 1) {
-                                    System.out.println("Costo");
+                                    System.out.println("Ingrese el costo");
                                     newProductSupplier.setCost(scan.nextBigDecimal());
                                     scan.nextLine();
-                                } else {
-                                    System.out.println("Porcentaje de ganancia");
+                                    System.out.println("Ingrese el margen de ganancia");
                                     newProductSupplier.setProfitMargin(scan.nextBigDecimal());
                                     scan.nextLine();
+                                    newProductSupplier.setPrice(newProductSupplier.getCost().add(newProductSupplier.getCost().multiply(newProductSupplier.getProfitMargin()).divide(BigDecimal.valueOf(100), RoundingMode.CEILING)));
+
+                                    productSupplierDTO = productSupplierMapper.fromEntityToDto(newProductSupplier);
+
+                                    productSupplierDTO = manager.Post("productSupplier", productSupplierDTO, ResponseProductSupplierDTO.class);
+
+                                    System.out.println("-- Carga exitosa --");
+
+                                    System.out.println(productSupplierDTO.toString());
+
+                                    continuar = false;
+
+                                }catch (Exception e) {
+
+                                    System.out.println("⚠ Error: " + e.getMessage());
+                                    continuar = chooseContinue(scan);
                                 }
-
-                                productSupplierDTO = manager.Patch("productSupplier", id, newProductSupplier, ResponseProductSupplierDTO.class);
-
-
-                                System.out.println("¿Desea modificar otro campo?");
-                                System.out.println("1. Si");
-                                System.out.println("0. No");
-                                opcion = scan.nextInt();
-                                scan.nextLine();
-
-                                System.out.println(productSupplierDTO.toString());
-
                             }
+                            continuar = true;
+                            break;
 
-                            opcion = 4;
+                        case 2:  // modificar costo o margen ganancia
+
+                            while (continuar){
+                                try {
+
+
+                                    System.out.println("Ingese el Id producto-proveedor");
+                                    id = scan.nextLine();
+                                    System.out.println("   Procesando...");
+
+                                    productSupplierDTO = manager.Get("productSupplier/relationship", id, ResponseProductSupplierDTO.class);
+
+                                    System.out.println(productSupplierDTO.toString());
+
+                                    newProductSupplier = productSupplierMapper.fromDtoToEntity(productSupplierDTO);
+
+                                    while (opcion != 0) {
+
+                                        System.out.println("-- Ingrese el campo que desea modificar --\n");
+
+                                        System.out.println("1. Costo");
+                                        System.out.println("2. Porcentaje de ganancia");
+                                        opcion = chooseOption(scan);
+
+                                        if (opcion == 1) {
+                                            System.out.println("Costo");
+                                            newProductSupplier.setCost(scan.nextBigDecimal());
+                                            scan.nextLine();
+                                        } else {
+                                            System.out.println("Porcentaje de ganancia");
+                                            newProductSupplier.setProfitMargin(scan.nextBigDecimal());
+                                            scan.nextLine();
+                                        }
+
+                                        productSupplierDTO = manager.Patch("productSupplier", id, newProductSupplier, ResponseProductSupplierDTO.class);
+
+
+                                        System.out.println("¿Desea modificar otro campo?");
+                                        System.out.println("1. Si");
+                                        System.out.println("0. No");
+                                        opcion = scan.nextInt();
+                                        scan.nextLine();
+
+                                        System.out.println(productSupplierDTO.toString());
+
+                                    }
+
+                                    continuar = false;
+
+                                }catch (Exception e) {
+
+                                    System.out.println("⚠ Error: " + e.getMessage());
+                                    continuar = chooseContinue(scan);
+                                }
+                            }
+                            continuar = true;
                             break;
 
                         case 3:  // filtrar por id de producto , nombre compañia, por id de relacion
@@ -507,138 +685,224 @@ public class MenuManager {
                             switch (opcion) {
                                 case 1: //id relacion
 
-                                    System.out.println("Ingrese el Id de producto-proveedor");
-                                    id = scan.nextLine();
-                                    System.out.println("   Procesando...");
+                                    while (continuar){
+                                        try {
 
-                                    productSupplierDTO = manager.Get("productSupplier/relationship", id, ResponseProductSupplierDTO.class);
+                                            System.out.println("Ingrese el Id de producto-proveedor");
+                                            id = scan.nextLine();
+                                            System.out.println("   Procesando...");
 
-                                    System.out.println(productSupplierDTO.toString());
+                                            productSupplierDTO = manager.Get("productSupplier/relationship", id, ResponseProductSupplierDTO.class);
 
+                                            System.out.println(productSupplierDTO.toString());
+
+                                            continuar = false;
+
+                                        }catch (Exception e) {
+
+                                            System.out.println("⚠ Error: " + e.getMessage());
+                                            continuar = chooseContinue(scan);
+                                        }
+                                    }
+                                    continuar = true;
                                     break;
 
                                 case 2: //nombre compañia
 
-                                    System.out.println("Ingrese el nombre de la compañia");
-                                    searchParam = scan.nextLine();
-                                    System.out.println("   Procesando...");
+                                    while (continuar){
+                                        try {
+
+                                            System.out.println("Ingrese el nombre de la compañia");
+                                            searchParam = scan.nextLine();
+                                            System.out.println("   Procesando...");
 
 
-                                    supplierProductListDTOS = manager.Get("productSupplier/filter", searchParam, SupplierProductListDTO.class);
+                                            supplierProductListDTOS = manager.Get("productSupplier/filter", searchParam, SupplierProductListDTO.class);
 
-                                    System.out.println(supplierProductListDTOS.toString());
+                                            System.out.println(supplierProductListDTOS.toString());
 
+                                            continuar = false;
+
+                                        }catch (Exception e) {
+
+                                            System.out.println("⚠ Error: " + e.getMessage());
+                                            continuar = chooseContinue(scan);
+                                        }
+                                    }
+                                    continuar = true;
                                     break;
 
                                 case 3: //id producto  /filter-product
-                                    System.out.println("Ingrese el Id del producto");
-                                    id = scan.nextLine();
-                                    System.out.println("   Procesando...");
 
-                                    productPricesDTO = manager.Get("productSupplier/filter-product", id, ProductPricesDTO.class);
+                                    while (continuar){
+                                        try {
 
-                                    System.out.println(productPricesDTO.toString());
+                                            System.out.println("Ingrese el Id del producto");
+                                            id = scan.nextLine();
+                                            System.out.println("   Procesando...");
 
+                                            productPricesDTO = manager.Get("productSupplier/filter-product", id, ProductPricesDTO.class);
+
+                                            System.out.println(productPricesDTO.toString());
+
+                                            continuar = false;
+
+                                        }catch (Exception e) {
+
+                                            System.out.println("⚠ Error: " + e.getMessage());
+                                            continuar = chooseContinue(scan);
+                                        }
+                                    }
+                                    continuar = true;
                                     break;
 
                                 case 0:
                                     //volver atras
-                                    printSubMenuFilterProductSupplier();
+                                    printSubMenuProductSupplier();
                                     opcion = chooseOption(scan);
                                     break;
 
                                 default:
                                     System.out.println("Opcion invalida");
+                                    break;
                             }
 
-                            opcion = 4;
                             break;
 
                         case 0:
                             //volver atras
-                            printMenuAdmin();
+                            printSubMenuProductSupplier();
                             opcion = chooseOption(scan);
                             break;
 
                         default:
                             System.out.println("Opcion invalida");
+                            break;
                     }
+                    printMenuAdmin();
+                    opcion = chooseOption(scan);
+                    break;
 
                 case 4:  //actalizacin lista de precios
 
-                    System.out.println("-- Visualizar todos los proveedores --\n");
+                    while (continuar){
+                        try {
 
-                    suppliersDTO = manager.Get("supplier", null, ViewSupplierDTO[].class);
+                            System.out.println("-- Visualizar todos los proveedores --\n");
 
-                    for (ViewSupplierDTO supplierDto : suppliersDTO) {
-                        System.out.println(supplierDto.toString());
-                    }
+                            suppliersDTO = manager.Get("supplier", null, ViewSupplierDTO[].class);
 
-                    System.out.println("Ingese el Id del proveedor");
-                    id = scan.nextLine();
+                            for (ViewSupplierDTO supplierDto : suppliersDTO) {
+                                System.out.println(supplierDto.toString());
+                            }
 
-                    System.out.println("   Procesando...");
+                            System.out.println("Ingese el Id del proveedor");
+                            id = scan.nextLine();
 
-                    supplierDTO = manager.Get("supplier",id, ViewSupplierDTO.class);
-                    System.out.println(supplierDTO.toString());
+                            System.out.println("   Procesando...");
 
-                    System.out.println("¿Desea agregar un costo general a los productos?");
+                            supplierDTO = manager.Get("supplier", id, ViewSupplierDTO.class);
+                            System.out.println(supplierDTO.toString());
 
-                    System.out.println("1. Si");
-                    System.out.println("2. No");
+                            System.out.println("¿Desea agregar un costo general a los productos?");
 
-                    opcion = scan.nextInt();
-                    scan.nextLine();
+                            System.out.println("1. Si");
+                            System.out.println("2. No");
 
-                    switch (opcion){
-
-                        case 1: //carga general de margen de ganancia
-
-                            System.out.println("Indique el margen de ganancia que desea aplicar");
-                            BigDecimal profitMargin = scan.nextBigDecimal();
+                            opcion = scan.nextInt();
                             scan.nextLine();
 
-                            System.out.println("\nIngrese el nombre del archivo");
-                            String newFile = scan.nextLine();
+                            switch (opcion) {
 
-                            queryParams = Map.of("file", newFile,
-                                    "idSupplier", id,
-                                    "bulkProfitMargin", profitMargin.toString());
+                                case 1: //carga general de margen de ganancia
+                                    while (continuar){
+                                        try {
 
-                            productNullCsv = manager.Post("productSupplier/uploadNonRelatedProducts", supplierDTO,String[].class, queryParams);
+                                            System.out.println("Indique el margen de ganancia que desea aplicar");
+                                            BigDecimal profitMargin = scan.nextBigDecimal();
+                                            scan.nextLine();
 
-                            break;
+                                            System.out.println("\nIngrese el nombre del archivo");
+                                            newFile = scan.nextLine();
 
-                        case 2:
+                                            queryParams = Map.of("file", newFile,
+                                                    "idSupplier", id,
+                                                    "bulkProfitMargin", profitMargin.toString());
 
-                            System.out.println("\nIngrese el nombre del archivo");
-                            newFile = scan.nextLine();
+                                            productNullCsv = manager.Post("productSupplier/uploadNonRelatedProducts", supplierDTO, String[].class, queryParams);
+                                            continuar = false;
 
-                            queryParams = Map.of("file", newFile,
-                                    "idSupplier", id);
+                                        }catch (Exception e) {
 
-                            productNullCsv = manager.Post("productSupplier/upload", supplierDTO,String[].class, queryParams);
+                                            System.out.println("⚠ Error: " + e.getMessage());
+                                            continuar = chooseContinue(scan);
+                                        }
+                                    }
+                                    continuar = true;
+                                    break;
 
-                            break;
+                                case 2:
 
-                        default:
-                            System.out.println("opcion invalida");
+                                    while (continuar){
+                                        try{
+
+                                            System.out.println("\nIngrese el nombre del archivo");
+                                            newFile = scan.nextLine();
+
+                                            queryParams = Map.of("file", newFile,
+                                                    "idSupplier", id);
+
+                                            productNullCsv = manager.Post("productSupplier/upload", supplierDTO, String[].class, queryParams);
+
+                                            continuar = false;
+                                        }catch (Exception e) {
+
+                                            System.out.println("⚠ Error: " + e.getMessage());
+                                            continuar = chooseContinue(scan);
+                                        }
+                                    }
+                                    continuar = true;
+                                    break;
+
+                                default:
+                                    System.out.println("opcion invalida");
+                                    break;
+                            }
+
+                            System.out.println("-- Carga exitosa --");
+
+                            continuar = false;
+
+                        }catch (Exception e) {
+                            System.out.println("⚠ Error: " + e.getMessage());
+                            continuar = chooseContinue(scan);
+                        }
                     }
-
-                    System.out.println("-- Carga exitosa --");
+                    continuar = true;
                     printMenuAdmin();
                     opcion = chooseOption(scan);
                     break;
 
                 case 5:  //moneda extranjera
 
-                    System.out.println("-- Cotizacion Dolar --");
+                    while (continuar){
+                        try {
 
-                    dolarDTO = manager.Get("misc/dollar", null, ViewDolarDTO.class);
-                    System.out.println("   Procesando...");
+                            System.out.println("-- Cotizacion Dolar --");
 
-                    System.out.println(dolarDTO.toString());
+                            dolarDTO = manager.Get("misc/dollar", null, ViewDolarDTO.class);
+                            System.out.println("   Procesando...");
 
+                            System.out.println(dolarDTO.toString());
+
+                            continuar = false;
+                        }catch (Exception e) {
+
+                            System.out.println("⚠ Error: " + e.getMessage());
+                            continuar = chooseContinue(scan);
+                        }
+                    }
+                    continuar = true;
                     printMenuAdmin();
                     opcion = chooseOption(scan);
                     break;
@@ -647,12 +911,12 @@ public class MenuManager {
                     System.out.println("Opción invalida");
                     printMenuAdmin();
                     opcion = chooseOption(scan);
+                    break;
 
             }
 
         }
-        System.out.println("-- No apague su pc --");
-        System.out.println("   Saliendo...");
+
     }
 
 

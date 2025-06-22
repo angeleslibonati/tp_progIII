@@ -4,12 +4,7 @@ import com.utn.ProgIII.View.ApiManager.ApiManagerImp;
 import com.utn.ProgIII.dto.LoginRequestDTO;
 import com.utn.ProgIII.dto.LoginResponseDTO;
 import com.utn.ProgIII.security.JwtUtil;
-import org.jline.reader.LineReader;
-import org.jline.reader.LineReaderBuilder;
-import org.jline.terminal.Terminal;
-import org.jline.terminal.TerminalBuilder;
 
-import java.io.Console;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -36,13 +31,9 @@ public class Menu {
                 System.out.println("Usuario : ");
                 username = scan.nextLine();
 
-                // Contraseña oculta
-                Terminal terminal = TerminalBuilder.terminal();
-                LineReader reader = LineReaderBuilder.builder()
-                        .terminal(terminal)
-                        .build();
-
-                password = reader.readLine("Contraseña : ", '*');
+                // Contraseña
+                System.out.println("Contraseña : ");
+                password = scan.nextLine();
 
                 //logueo
                 credencialDTO = new LoginRequestDTO(username,password);
@@ -73,6 +64,9 @@ public class Menu {
                 continuar = chooseContinue(scan);
             }
         }
+
+        System.out.println("-- No apague su pc --");
+        System.out.println("   Saliendo...");
 
     }
 

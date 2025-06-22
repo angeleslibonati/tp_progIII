@@ -2,7 +2,6 @@ package com.utn.ProgIII.View.Menu;
 
 import com.utn.ProgIII.View.ApiManager.ApiManagerImp;
 import com.utn.ProgIII.dto.*;
-import com.utn.ProgIII.exceptions.DuplicateEntityException;
 import com.utn.ProgIII.mapper.ProductMapper;
 import com.utn.ProgIII.mapper.ProductSupplierMapper;
 import com.utn.ProgIII.mapper.SupplierMapper;
@@ -16,8 +15,6 @@ import com.utn.ProgIII.model.ProductSupplier.ProductSupplier;
 import com.utn.ProgIII.model.Supplier.Supplier;
 import com.utn.ProgIII.model.User.User;
 import com.utn.ProgIII.model.User.UserStatus;
-import com.utn.ProgIII.validations.UserValidations;
-import org.springframework.boot.autoconfigure.web.ErrorProperties;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -131,7 +128,6 @@ public class MenuAdmin {
 
                                     System.out.println(userDTO.toString());
 
-                                    opcion = 1;
                                     continuar = false;
 
                                 } catch (Exception e) {
@@ -139,6 +135,7 @@ public class MenuAdmin {
                                     continuar = chooseContinue(scan);
                                 }
                             }
+                            continuar = true;
 
                             break;
 
@@ -172,7 +169,6 @@ public class MenuAdmin {
                                     userDTO = manager.Delete("users", id, UserWithCredentialDTO.class, queryParams);
                                     System.out.println("\n-- Eliminación exitosa --");
 
-                                    opcion = 1;
                                     continuar = false;
 
                                 } catch (Exception e) {
@@ -180,6 +176,7 @@ public class MenuAdmin {
                                     continuar = chooseContinue(scan);
                                 }
                             }
+                            continuar = true;
 
                             break;
 
@@ -265,7 +262,6 @@ public class MenuAdmin {
                                         System.out.println(userDTO.toString());
                                     }
 
-                                    opcion = 1;
                                     continuar = false;
 
                                 } catch (Exception e) {
@@ -274,6 +270,7 @@ public class MenuAdmin {
                                 }
 
                             }
+                            continuar = true;
 
                             break;
 
@@ -290,13 +287,13 @@ public class MenuAdmin {
                                         System.out.println(userWithCredentialDTO.toString());
                                     }
 
-                                    opcion = 1;
                                     continuar = false;
                                 } catch (Exception e) {
                                     System.out.println("⚠ Error: " + e.getMessage());
                                     continuar = chooseContinue(scan);
                                 }
                             }
+                            continuar = true;
                             break;
 
                         case 5:
@@ -323,6 +320,7 @@ public class MenuAdmin {
                                             continuar = chooseContinue(scan);
                                         }
                                     }
+                                    continuar = true;
                                     break;
 
                                 case 2:
@@ -349,6 +347,7 @@ public class MenuAdmin {
                                                     continuar = chooseContinue(scan);
                                                 }
                                             }
+                                            continuar = true;
                                             break;
 
                                         case 2:  //manager
@@ -371,6 +370,7 @@ public class MenuAdmin {
                                                      continuar = chooseContinue(scan);
                                                  }
                                             }
+                                            continuar = true;
                                             break;
 
                                         case 3:  //cajero
@@ -391,6 +391,7 @@ public class MenuAdmin {
                                                     continuar = chooseContinue(scan);
                                                 }
                                             }
+                                            continuar = true;
                                             break;
 
                                         default:
@@ -401,7 +402,6 @@ public class MenuAdmin {
                                 case 3:
 
                                     while (continuar){
-
 
                                         try {
 
@@ -435,6 +435,7 @@ public class MenuAdmin {
                                         }
 
                                     }
+                                    continuar = true;
                                     break;
 
                                 case 0:
@@ -447,17 +448,16 @@ public class MenuAdmin {
                                     System.out.println("Opción invalida");
 
                             }
-                            opcion = 1;
                             break;
                         case 0:
                             //volver atras
-                            printMenuAdmin();
-                            opcion = chooseOption(scan);
                             break;
 
                         default:
                             System.out.println("Opcion invalida");
                     }
+                    printMenuAdmin();
+                    opcion = chooseOption(scan);
                     break;
                     
                 case 2:  //gestion producto
@@ -486,7 +486,6 @@ public class MenuAdmin {
                                     System.out.println("-- Carga exitosa -- ");
                                     System.out.println(productDTO.toString());
 
-                                    opcion = 2;
                                     continuar = false;
 
                                 } catch (Exception e) {
@@ -495,6 +494,7 @@ public class MenuAdmin {
                                     continuar = chooseContinue(scan);
                                 }
                             }
+                            continuar = true;
                             break;
 
                         case 2:
@@ -524,6 +524,7 @@ public class MenuAdmin {
                                     continuar = chooseContinue(scan);
                                 }
                             }
+                            continuar = true;
                             break;
 
                         case 3:
@@ -582,7 +583,7 @@ public class MenuAdmin {
 
                                         System.out.println(productDTO.toString());
                                     }
-                                    opcion = 2;
+
                                     continuar = false;
                                 }catch (Exception e) {
 
@@ -590,7 +591,7 @@ public class MenuAdmin {
                                     continuar = chooseContinue(scan);
                                 }
                             }
-
+                            continuar = true;
                             break;
 
                         case 4:
@@ -607,7 +608,6 @@ public class MenuAdmin {
                                         System.out.println(productDto.toString());
                                     }
 
-                                    opcion = 2;
                                     continuar = false;
 
                                 }catch (Exception e) {
@@ -617,6 +617,7 @@ public class MenuAdmin {
                                 }
 
                             }
+                            continuar = true;
                             break;
 
                         case 5:
@@ -637,6 +638,9 @@ public class MenuAdmin {
                                             productDTO = manager.Get("product", id, ProductDTO.class);
 
                                             System.out.println(productDTO.toString());
+
+                                            continuar = false;
+
                                         }catch (Exception e) {
 
                                             System.out.println("⚠ Error: " + e.getMessage());
@@ -644,6 +648,7 @@ public class MenuAdmin {
                                         }
 
                                     }
+                                    continuar = true;
                                     break;
 
                                 case 2:
@@ -670,6 +675,7 @@ public class MenuAdmin {
                                         }
 
                                     }
+                                    continuar = true;
                                     break;
 
                                 case 3:
@@ -704,6 +710,7 @@ public class MenuAdmin {
                                             continuar = chooseContinue(scan);
                                         }
                                     }
+                                    continuar = true;
                                     break;
 
                                 case 0:
@@ -714,21 +721,23 @@ public class MenuAdmin {
 
                                 default:
                                     System.out.println("Opción invalida");
+                                    break;
 
                             }
 
-                            opcion = 2;
                             break;
 
                         case 0:
-                            //volver atras
-                            printMenuAdmin();
-                            opcion = chooseOption(scan);
+//                            //volver atras
+//                            printMenuAdmin();
+//                            opcion = chooseOption(scan);
                             break;
                         default:
                             System.out.println("Opción invalida");
+                            break;
                     }
-
+                    printMenuAdmin();
+                    opcion = chooseOption(scan);
                     break;
 
                 case 3:  //Gestion proveedor
@@ -771,7 +780,6 @@ public class MenuAdmin {
 
                                     System.out.println(supplierDTO.toString());
 
-                                    opcion = 3;
                                     continuar = false;
                                 }catch (Exception e) {
 
@@ -780,6 +788,7 @@ public class MenuAdmin {
                                 }
 
                             }
+                            continuar = true;
                             break;
 
                         case 2:  //baja
@@ -797,7 +806,6 @@ public class MenuAdmin {
                                     supplierDTO = manager.Delete("supplier", id, ViewSupplierDTO.class);
                                     System.out.println("\n-- Eliminación exitosa --");
 
-                                    opcion = 3;
                                     continuar = false;
                                 }catch (Exception e) {
 
@@ -805,12 +813,12 @@ public class MenuAdmin {
                                     continuar = chooseContinue(scan);
                                 }
                             }
+                            continuar = true;
                             break;
 
                         case 3:  //modificar
                             while (continuar){
                                 try {
-
 
                                     System.out.println("-- Modificación proveedor --\n");
 
@@ -860,6 +868,7 @@ public class MenuAdmin {
                                                 break;
                                             default:
                                                 System.out.println("Opcion invalida");
+                                                break;
 
                                         }
 
@@ -875,7 +884,6 @@ public class MenuAdmin {
                                         System.out.println(supplierDTO.toString());
                                     }
 
-                                    opcion = 3;
                                     continuar = false;
                                 }catch (Exception e) {
 
@@ -883,6 +891,7 @@ public class MenuAdmin {
                                     continuar = chooseContinue(scan);
                                 }
                             }
+                            continuar = true;
                             break;
 
                         case 4:  //visualiza todos los proveedores
@@ -899,7 +908,6 @@ public class MenuAdmin {
                                         System.out.println(supplierDto.toString());
                                     }
 
-                                    opcion = 3;
                                     continuar = false;
 
                                 }catch (Exception e) {
@@ -908,6 +916,7 @@ public class MenuAdmin {
                                     continuar = chooseContinue(scan);
                                 }
                             }
+                            continuar = true;
                             break;
 
                         case 5:  //filtra
@@ -924,7 +933,6 @@ public class MenuAdmin {
 
                                     System.out.println(supplierDTO.toString());
 
-                                    opcion = 3;
                                     continuar = false;
 
                                 }catch (Exception e) {
@@ -933,19 +941,22 @@ public class MenuAdmin {
                                     continuar = chooseContinue(scan);
                                 }
                             }
-
+                            continuar = true;
                             break;
 
                         case 0:
                             //volver atras
-                            printMenuAdmin();
-                            opcion = chooseOption(scan);
+//                            printMenuAdmin();
+//                            opcion = chooseOption(scan);
                             break;
 
                         default:
                             System.out.println("opción invalida");
+                            break;
                     }
 
+                    printMenuAdmin();
+                    opcion = chooseOption(scan);
                     break;
 
                 case 4:  //Gestion producto-proveedor
@@ -997,7 +1008,6 @@ public class MenuAdmin {
 
                                     System.out.println(productSupplierDTO.toString());
 
-                                    opcion = 4;
                                     continuar = false;
 
                                 }catch (Exception e) {
@@ -1006,6 +1016,7 @@ public class MenuAdmin {
                                     continuar = chooseContinue(scan);
                                 }
                             }
+                            continuar = true;
                             break;
 
                         case 2:  // modificar costo o margen ganancia
@@ -1055,7 +1066,6 @@ public class MenuAdmin {
 
                                     }
 
-                                    opcion = 4;
                                     continuar = false;
 
                                 }catch (Exception e) {
@@ -1064,6 +1074,7 @@ public class MenuAdmin {
                                     continuar = chooseContinue(scan);
                                 }
                             }
+                            continuar = true;
                             break;
 
                         case 3:  // filtrar por id de producto , nombre compañia, por id de relacion
@@ -1076,7 +1087,6 @@ public class MenuAdmin {
                                     while (continuar){
                                         try {
 
-
                                             System.out.println("Ingrese el Id de producto-proveedor");
                                             id = scan.nextLine();
                                             System.out.println("   Procesando...");
@@ -1086,12 +1096,14 @@ public class MenuAdmin {
                                             System.out.println(productSupplierDTO.toString());
 
                                             continuar = false;
+
                                         }catch (Exception e) {
 
                                                 System.out.println("⚠ Error: " + e.getMessage());
                                                 continuar = chooseContinue(scan);
                                         }
                                     }
+                                    continuar = true;
                                     break;
 
                                 case 2: //nombre compañia
@@ -1116,6 +1128,7 @@ public class MenuAdmin {
                                             continuar = chooseContinue(scan);
                                         }
                                     }
+                                    continuar = true;
                                     break;
 
                                 case 3: //id producto  /filter-product
@@ -1139,36 +1152,40 @@ public class MenuAdmin {
                                             continuar = chooseContinue(scan);
                                         }
                                     }
+                                    continuar = true;
                                     break;
 
                                 case 0:
                                     //volver atras
-                                    printSubMenuFilterProductSupplier();
+                                    printSubMenuProductSupplier();
                                     opcion = chooseOption(scan);
                                     break;
 
                                 default:
                                     System.out.println("Opcion invalida");
+                                    break;
                             }
 
                             break;
 
                         case 0:
                             //volver atras
-                            printMenuAdmin();
+                            printSubMenuProductSupplier();
                             opcion = chooseOption(scan);
                             break;
 
                         default:
                             System.out.println("Opcion invalida");
+                            break;
                     }
+                    printMenuAdmin();
+                    opcion = chooseOption(scan);
                     break;
 
                 case 5:  //actalizacin lista de precios
 
                     while (continuar){
                         try {
-
 
                             System.out.println("-- Visualizar todos los proveedores --\n");
 
@@ -1220,6 +1237,7 @@ public class MenuAdmin {
                                             continuar = chooseContinue(scan);
                                         }
                                     }
+                                    continuar = true;
                                     break;
 
                                 case 2:
@@ -1242,15 +1260,15 @@ public class MenuAdmin {
                                             continuar = chooseContinue(scan);
                                         }
                                     }
+                                    continuar = true;
                                     break;
 
                                 default:
                                     System.out.println("opcion invalida");
+                                    break;
                             }
 
                             System.out.println("-- Carga exitosa --");
-                            printMenuAdmin();
-                            opcion = chooseOption(scan);
 
                             continuar = false;
 
@@ -1258,7 +1276,10 @@ public class MenuAdmin {
                                 System.out.println("⚠ Error: " + e.getMessage());
                                 continuar = chooseContinue(scan);
                             }
-                        }
+                    }
+                    continuar = true;
+                    printMenuAdmin();
+                    opcion = chooseOption(scan);
                     break;
 
                 case 6:  //moneda extranjera
@@ -1273,9 +1294,6 @@ public class MenuAdmin {
 
                             System.out.println(dolarDTO.toString());
 
-                            printMenuAdmin();
-                            opcion = chooseOption(scan);
-
                             continuar = false;
                         }catch (Exception e) {
 
@@ -1283,18 +1301,21 @@ public class MenuAdmin {
                             continuar = chooseContinue(scan);
                         }
                     }
+                    continuar = true;
+                    printMenuAdmin();
+                    opcion = chooseOption(scan);
                     break;
 
                 default:
                     System.out.println("Opción invalida");
                     printMenuAdmin();
                     opcion = chooseOption(scan);
+                    break;
 
             }
 
         }
-        System.out.println("-- No apague su pc --");
-        System.out.println("   Saliendo...");
+
     }
 
 }

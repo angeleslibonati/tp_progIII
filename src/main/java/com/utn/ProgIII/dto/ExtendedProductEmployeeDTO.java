@@ -17,7 +17,7 @@ public record ExtendedProductEmployeeDTO(
         @Override
         public String toString() {
                 return String.format(
-                        "ExtendedProductEmployeeDTO[\n" +
+                        "Product[\n" +
                                 "\tidProduct :  %d,\n" +
                                 "\tproduct name:  %s,\n" +
                                 "\tprice   :  %s\n" +

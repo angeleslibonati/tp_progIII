@@ -115,12 +115,6 @@
 
         <!-- Local Library end -->
 
-        <dependency>
-            <groupId>org.jline</groupId>
-            <artifactId>jline</artifactId>
-            <version>3.23.0</version>
-        </dependency>
-
     </dependencies>
 
 
