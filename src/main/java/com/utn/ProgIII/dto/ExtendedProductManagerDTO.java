@@ -24,12 +24,12 @@ public record ExtendedProductManagerDTO(
         public String toString() {
                 return String.format(
                         "Product[\n" +
-                                "\tidProduct :  %d,\n" +
-                                "\tproduct name:  %s,\n" +
-                                "\tcost   :  %s\n" +
-                                "\tprofitMargin   :  %s\n" +
-                                "\tprice   :  %s\n" +
-                                "\tdollarPrice   :  %s\n" +
+                                "\tidProduct      :  %d,\n" +
+                                "\tproduct name   :  %s,\n" +
+                                "\tcost           :  $%s\n" +
+                                "\tprofitMargin   :  %s%%\n" +
+                                "\tprice          :  $%s\n" +
+                                "\tdollarPrice    :  U$D%s\n" +
                                 "]",
                         idProduct, name, cost, profitMargin, price, dollarPrice
                 );

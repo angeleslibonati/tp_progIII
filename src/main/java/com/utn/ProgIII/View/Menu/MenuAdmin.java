@@ -728,9 +728,6 @@ public class MenuAdmin {
                             break;
 
                         case 0:
-//                            //volver atras
-//                            printMenuAdmin();
-//                            opcion = chooseOption(scan);
                             break;
                         default:
                             System.out.println("Opción invalida");

@@ -19,4 +19,26 @@ public record ProductPriceSupplierManagerDTO(
         BigDecimal dollarPrice
 ) {
 
+        @Override
+        public String toString() {
+                return String.format(
+                        "ManagerPrice[\n" +
+                                "\tsupplierName :  %s,\n" +
+                                "\tcost         :  $%s,\n" +
+                                "\tprofitMargin :  %s%%,\n" +
+                                "\tfinalPrice   :  $%s,\n" +
+                                "\tdollarPrice   : U$D %s\n" +
+                                "]",
+                        companyName,
+                        format(cost),
+                        format(profitMargin),
+                        format(price),
+                        format(dollarPrice)
+                );
+        }
+
+        private String format(BigDecimal val) {
+                return val.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+        }
+
 }
