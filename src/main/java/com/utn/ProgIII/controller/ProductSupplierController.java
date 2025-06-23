@@ -72,7 +72,7 @@ public class ProductSupplierController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    //faltan anotaciones
+
     @GetMapping("/relationship/{id}")
     public ResponseEntity<ResponseProductSupplierDTO> getProductSupplierById(@PathVariable Long id) {
         ResponseProductSupplierDTO productSupplier = productSupplierService.findById(id);

@@ -17,19 +17,29 @@ public class MenuCashier {
         ProductPricesDTO productPricesDTO;
         SupplierProductListDTO[] supplierProductListsDto;
 
-        int opcion = 1;
-        printMenuCashier();
-        opcion = chooseOption(scan);
+        boolean continuar = true;
+        int opcion = 0;
+        while (continuar){
+            try {
+                printMenuCashier();
+                opcion = chooseOption(scan);
+                continuar = false;
+            } catch (Exception e) {
+                System.out.println("⚠ Error: " + e.getMessage());
+                continuar = chooseContinue(scan);
+            }
+        }
+        continuar = true;
 
         String id;
         String searchParam;
-        boolean continuar = true;
 
-        while (opcion != 0) {
+        do {
 
             switch (opcion) {
 
                 case 1:  //filtrar listas por nombre de compañia
+
                     while (continuar){
                         try {
 
@@ -44,6 +54,17 @@ public class MenuCashier {
 
                             continuar = false;
 
+                        } catch (Exception e) {
+                            System.out.println("⚠ Error: " + e.getMessage());
+                            continuar = chooseContinue(scan);
+                        }
+                    }
+                    continuar = true;
+                    while (continuar){
+                        try {
+                            printMenuCashier();
+                            opcion = chooseOption(scan);
+                            continuar = false;
                         } catch (Exception e) {
                             System.out.println("⚠ Error: " + e.getMessage());
                             continuar = chooseContinue(scan);
@@ -72,6 +93,17 @@ public class MenuCashier {
                         }
                     }
                     continuar = true;
+                    while (continuar){
+                        try {
+                            printMenuCashier();
+                            opcion = chooseOption(scan);
+                            continuar = false;
+                        } catch (Exception e) {
+                            System.out.println("⚠ Error: " + e.getMessage());
+                            continuar = chooseContinue(scan);
+                        }
+                    }
+                    continuar = true;
                     break;
 
                 case 3:
@@ -89,9 +121,19 @@ public class MenuCashier {
                                 System.out.println(supplierProduct.toString());
                             }
 
-
                             continuar = false;
 
+                        } catch (Exception e) {
+                            System.out.println("⚠ Error: " + e.getMessage());
+                            continuar = chooseContinue(scan);
+                        }
+                    }
+                    continuar = true;
+                    while (continuar){
+                        try {
+                            printMenuCashier();
+                            opcion = chooseOption(scan);
+                            continuar = false;
                         } catch (Exception e) {
                             System.out.println("⚠ Error: " + e.getMessage());
                             continuar = chooseContinue(scan);
@@ -102,10 +144,20 @@ public class MenuCashier {
 
                 default:
                     System.out.println("Opción invalida");
-                    printMenuCashier();
-                    opcion = chooseOption(scan);
+                    while (continuar){
+                        try {
+                            printMenuCashier();
+                            opcion = chooseOption(scan);
+                            continuar = false;
+                        } catch (Exception e) {
+                            System.out.println("⚠ Error: " + e.getMessage());
+                            continuar = chooseContinue(scan);
+                        }
+                    }
+                    continuar = true;
                     break;
             }
-        }
+
+        }while (opcion != 0);
     }
 }

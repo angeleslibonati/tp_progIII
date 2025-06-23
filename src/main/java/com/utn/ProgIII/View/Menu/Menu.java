@@ -16,6 +16,7 @@ public class Menu {
         String rol = "";
 
         System.out.println("-- Bienvenido --\n");
+
         while (continuar){
             try {
 
@@ -89,10 +90,11 @@ public class Menu {
 
     //elegir opcion para continuar por error
     public static boolean chooseContinue(Scanner scan){
-        String opcionContinuar;
+        String opcionContinuar = "";
         boolean continuar = true;
 
         System.out.print("¿Desea intentar nuevamente? (si/no): ");
+        scan.nextLine();
         opcionContinuar = scan.nextLine();
 
         if(!opcionContinuar.equalsIgnoreCase("si")){

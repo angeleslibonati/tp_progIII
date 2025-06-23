@@ -6,10 +6,12 @@ import com.utn.ProgIII.mapper.ProductMapper;
 import com.utn.ProgIII.mapper.ProductSupplierMapper;
 import com.utn.ProgIII.mapper.SupplierMapper;
 import com.utn.ProgIII.model.Address.Address;
+import com.utn.ProgIII.model.Credential.Role;
 import com.utn.ProgIII.model.Product.Product;
 import com.utn.ProgIII.model.Product.ProductStatus;
 import com.utn.ProgIII.model.ProductSupplier.ProductSupplier;
 import com.utn.ProgIII.model.Supplier.Supplier;
+import com.utn.ProgIII.model.User.UserStatus;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -24,9 +26,20 @@ public class MenuManager {
 
     public static void menuManager (Scanner scan, ApiManagerImp manager) throws IOException, InterruptedException {
 
-        int opcion = 1;
-        printMenuManager();
-        opcion = chooseOption(scan);
+        boolean continuar = true;
+        int opcion = 0;
+        while (continuar){
+            try {
+
+                printMenuManager();
+                opcion = chooseOption(scan);
+                continuar = false;
+            } catch (Exception e) {
+                System.out.println("⚠ Error: " + e.getMessage());
+                continuar = chooseContinue(scan);
+            }
+        }
+        continuar = true;
 
         Map<String,String> queryParams;
 
@@ -55,16 +68,24 @@ public class MenuManager {
         String id;
         String searchParam;
         String newFile;
-        boolean continuar = true;
 
-        while (opcion != 0){
+        do {
 
             switch (opcion) {
 
                 case 1:  //gestion producto
 
-                    printSubMenuproduct();
-                    opcion = chooseOption(scan);
+                    while (continuar){
+                        try{
+                            printSubMenuproduct();
+                            opcion = chooseOption(scan);
+                            continuar = false;
+                        } catch (Exception e) {
+                            System.out.println("⚠ Error: " + e.getMessage());
+                            continuar = chooseContinue(scan);
+                        }
+                    }
+                    continuar = true;
 
                     switch (opcion) {
 
@@ -223,9 +244,18 @@ public class MenuManager {
 
                         case 5:
 
-                            printSubMenuFilterProduct();
-                            opcion = chooseOption(scan);
+                            while (continuar){
+                                try {
 
+                                    printSubMenuFilterProduct();
+                                    opcion = chooseOption(scan);
+                                    continuar = false;
+                                } catch (Exception e) {
+                                    System.out.println("⚠ Error: " + e.getMessage());
+                                    continuar = chooseContinue(scan);
+                                }
+                            }
+                            continuar = true;
                             switch (opcion) {
 
                                 case 1:
@@ -257,7 +287,6 @@ public class MenuManager {
                                     while (continuar){
 
                                         try {
-
 
                                             System.out.println("Ingrese el nombre del producto");
                                             searchParam = scan.nextLine();
@@ -316,8 +345,18 @@ public class MenuManager {
 
                                 case 0:
                                     //volver atras
-                                    printSubMenuproduct();
-                                    opcion = chooseOption(scan);
+                                    while (continuar){
+                                        try{
+
+                                            printSubMenuproduct();
+                                            opcion = chooseOption(scan);
+                                            continuar = false;
+                                        } catch (Exception e) {
+                                            System.out.println("⚠ Error: " + e.getMessage());
+                                            continuar = chooseContinue(scan);
+                                        }
+                                    }
+                                    continuar = true;
                                     break;
 
                                 default:
@@ -329,22 +368,38 @@ public class MenuManager {
                             break;
 
                         case 0:
-//                            //volver atras
-//                            printMenuAdmin();
-//                            opcion = chooseOption(scan);
                             break;
                         default:
                             System.out.println("Opción invalida");
                             break;
                     }
-                    printMenuAdmin();
-                    opcion = chooseOption(scan);
+                    while (continuar){
+                        try {
+
+                            printMenuManager();
+                            opcion = chooseOption(scan);
+                            continuar = false;
+                        } catch (Exception e) {
+                            System.out.println("⚠ Error: " + e.getMessage());
+                            continuar = chooseContinue(scan);
+                        }
+                    }
+                    continuar = true;
                     break;
 
                 case 2:  //Gestion proveedor
 
-                    printSubMenuSupplier();
-                    opcion = chooseOption(scan);
+                    while (continuar){
+                        try {
+                            printSubMenuSupplier();
+                            opcion = chooseOption(scan);
+                            continuar = false;
+                        } catch (Exception e) {
+                            System.out.println("⚠ Error: " + e.getMessage());
+                            continuar = chooseContinue(scan);
+                        }
+                    }
+                    continuar = true;
 
                     switch (opcion) {
 
@@ -396,7 +451,6 @@ public class MenuManager {
 
                             while (continuar){
                                 try {
-
 
                                     System.out.println("-- Eliminar proveedor --\n");
 
@@ -500,7 +554,6 @@ public class MenuManager {
                             while (continuar){
                                 try {
 
-
                                     System.out.println("-- Visualizar todos los proveedores --\n");
 
                                     suppliersDTO = manager.Get("supplier", null, ViewSupplierDTO[].class);
@@ -547,23 +600,39 @@ public class MenuManager {
 
                         case 0:
                             //volver atras
-//                            printMenuAdmin();
-//                            opcion = chooseOption(scan);
+
                             break;
 
                         default:
                             System.out.println("opción invalida");
                             break;
                     }
+                    while (continuar){
+                        try {
 
-                    printMenuAdmin();
-                    opcion = chooseOption(scan);
+                            printMenuManager();
+                            opcion = chooseOption(scan);
+                            continuar = false;
+                        } catch (Exception e) {
+                            System.out.println("⚠ Error: " + e.getMessage());
+                            continuar = chooseContinue(scan);
+                        }
+                    }
+                    continuar = true;
                     break;
 
                 case 3:  //Gestion producto-proveedor
-
-                    printSubMenuProductSupplier();
-                    opcion = chooseOption(scan);
+                    while (continuar){
+                        try {
+                            printSubMenuProductSupplier();
+                            opcion = chooseOption(scan);
+                            continuar = false;
+                        } catch (Exception e) {
+                            System.out.println("⚠ Error: " + e.getMessage());
+                            continuar = chooseContinue(scan);
+                        }
+                    }
+                    continuar = true;
 
                     switch (opcion) {
 
@@ -625,7 +694,6 @@ public class MenuManager {
                             while (continuar){
                                 try {
 
-
                                     System.out.println("Ingese el Id producto-proveedor");
                                     id = scan.nextLine();
                                     System.out.println("   Procesando...");
@@ -679,8 +747,17 @@ public class MenuManager {
                             break;
 
                         case 3:  // filtrar por id de producto , nombre compañia, por id de relacion
-                            printSubMenuFilterProductSupplier();
-                            opcion = chooseOption(scan);
+                            while (continuar){
+                                try {
+                                    printSubMenuFilterProductSupplier();
+                                    opcion = chooseOption(scan);
+                                    continuar = false;
+                                } catch (Exception e) {
+                                    System.out.println("⚠ Error: " + e.getMessage());
+                                    continuar = chooseContinue(scan);
+                                }
+                            }
+                            continuar = true;
 
                             switch (opcion) {
                                 case 1: //id relacion
@@ -758,8 +835,7 @@ public class MenuManager {
 
                                 case 0:
                                     //volver atras
-                                    printSubMenuProductSupplier();
-                                    opcion = chooseOption(scan);
+
                                     break;
 
                                 default:
@@ -771,16 +847,35 @@ public class MenuManager {
 
                         case 0:
                             //volver atras
-                            printSubMenuProductSupplier();
-                            opcion = chooseOption(scan);
+                            while (continuar){
+                                try {
+                                    printSubMenuProductSupplier();
+                                    opcion = chooseOption(scan);
+                                    continuar = false;
+                                } catch (Exception e) {
+                                    System.out.println("⚠ Error: " + e.getMessage());
+                                    continuar = chooseContinue(scan);
+                                }
+                            }
+                            continuar = true;
                             break;
 
                         default:
                             System.out.println("Opcion invalida");
                             break;
                     }
-                    printMenuAdmin();
-                    opcion = chooseOption(scan);
+                    while (continuar){
+                        try {
+                            printMenuManager();
+                            opcion = chooseOption(scan);
+                            continuar = false;
+
+                        } catch (Exception e) {
+                            System.out.println("⚠ Error: " + e.getMessage());
+                            continuar = chooseContinue(scan);
+                        }
+                    }
+                    continuar = true;
                     break;
 
                 case 4:  //actalizacin lista de precios
@@ -879,8 +974,19 @@ public class MenuManager {
                         }
                     }
                     continuar = true;
-                    printMenuAdmin();
-                    opcion = chooseOption(scan);
+                    while (continuar){
+                        try {
+
+                            printMenuManager();
+                            opcion = chooseOption(scan);
+                            continuar = false;
+
+                        } catch (Exception e) {
+                            System.out.println("⚠ Error: " + e.getMessage());
+                            continuar = chooseContinue(scan);
+                        }
+                    }
+                    continuar = true;
                     break;
 
                 case 5:  //moneda extranjera
@@ -903,19 +1009,37 @@ public class MenuManager {
                         }
                     }
                     continuar = true;
-                    printMenuAdmin();
-                    opcion = chooseOption(scan);
+                    while (continuar){
+                        try {
+
+                            printMenuManager();
+                            opcion = chooseOption(scan);
+                            continuar = false;
+                        } catch (Exception e) {
+                            System.out.println("⚠ Error: " + e.getMessage());
+                            continuar = chooseContinue(scan);
+                        }
+                    }
+                    continuar = true;
                     break;
 
                 default:
                     System.out.println("Opción invalida");
-                    printMenuAdmin();
-                    opcion = chooseOption(scan);
+                    while (continuar){
+                        try {
+                            printMenuManager();
+                            opcion = chooseOption(scan);
+                            continuar = false;
+                        } catch (Exception e) {
+                            System.out.println("⚠ Error: " + e.getMessage());
+                            continuar = chooseContinue(scan);
+                        }
+                    }
+                    continuar = true;
                     break;
-
             }
 
-        }
+        }while (opcion != 0);
 
     }
 
